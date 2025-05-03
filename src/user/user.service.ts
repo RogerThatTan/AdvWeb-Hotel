@@ -79,4 +79,17 @@ export class UserService {
       return { message: 'Error updating user', error };
     }
   }
+
+  // Find User By Phone----------------------------------------------------
+  public async findUserByPhone(phone: string) {
+    try {
+      const user = await this.userRepository.findOne({
+        where: { phone: phone },
+      });
+
+      return user ? user : null;
+    } catch (error) {
+      return null;
+    }
+  }
 }

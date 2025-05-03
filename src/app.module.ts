@@ -20,6 +20,7 @@ import { HashingProvider } from './hash/hashing.provider';
 import { HashModule } from './hash/hash.module';
 import { HashService } from './hash/hash.service';
 import { BcryptProvider } from './hash/bcrypt.provider';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -51,6 +52,8 @@ import { BcryptProvider } from './hash/bcrypt.provider';
         database: 'hotel_management',
       }),
     }),
+
+    ConfigModule.forRoot({ isGlobal: true }),
     HashModule,
   ],
   controllers: [AppController],

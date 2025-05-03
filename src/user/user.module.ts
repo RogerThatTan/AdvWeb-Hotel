@@ -9,5 +9,6 @@ import { HashModule } from 'src/hash/hash.module';
   controllers: [UserController],
   providers: [UserService],
   imports: [TypeOrmModule.forFeature([User]), HashModule],
+  exports: [UserService],
 })
 export class UserModule {}
