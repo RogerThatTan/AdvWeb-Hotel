@@ -5,6 +5,7 @@ import {
   ManyToOne,
   OneToMany,
   JoinColumn,
+  CreateDateColumn,
 } from 'typeorm';
 import { Employee } from '../../management/entities/employee.entity';
 import { Booking } from '../../booking/entities/booking.entity';
@@ -24,7 +25,7 @@ export class Coupon {
   @Column({ type: 'boolean' })
   is_active: boolean;
 
-  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  @CreateDateColumn()
   created_at: Date;
 
   @ManyToOne(() => Employee, (employee) => employee.coupons)
