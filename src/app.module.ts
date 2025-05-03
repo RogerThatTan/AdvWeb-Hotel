@@ -16,6 +16,10 @@ import { ConfirmationModule } from './confirmation/confirmation.module';
 import { FeedbackModule } from './feedback/feedback.module';
 import { ReservationModule } from './reservation/reservation.module';
 import { UserModule } from './user/user.module';
+import { HashingProvider } from './hash/hashing.provider';
+import { HashModule } from './hash/hash.module';
+import { HashService } from './hash/hash.service';
+import { BcryptProvider } from './hash/bcrypt.provider';
 
 @Module({
   imports: [
@@ -47,8 +51,9 @@ import { UserModule } from './user/user.module';
         database: 'hotel_management',
       }),
     }),
+    HashModule,
   ],
   controllers: [AppController],
-  providers: [AppService], 
+  providers: [AppService],
 })
 export class AppModule {}
