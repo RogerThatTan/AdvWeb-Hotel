@@ -23,8 +23,8 @@ import { AccessTokenGuard } from 'src/auth/guards/access-token/access-token.guar
   imports: [
     TypeOrmModule.forFeature([User]),
     HashModule,
-    ConfigModule.forFeature(jwtConfig),
-    JwtModule.registerAsync(jwtConfig.asProvider()),
+    // ConfigModule.forFeature(jwtConfig),
+    // JwtModule.registerAsync(jwtConfig.asProvider()),
   ],
   exports: [UserService],
 })

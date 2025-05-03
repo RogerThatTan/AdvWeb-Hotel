@@ -8,10 +8,12 @@ import { ConfigModule } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import jwtConfig from './config/jwt.config';
 import { HashModule } from 'src/hash/hash.module';
+import { GenerateTokensProvider } from './generate-tokens.provider';
+import { RefreshTokensProvider } from './refresh-tokens.provider';
 
 @Module({
   controllers: [AuthController],
-  providers: [AuthService, SignInProvider],
+  providers: [AuthService, SignInProvider, GenerateTokensProvider, RefreshTokensProvider],
   exports: [AuthService],
   imports: [
     ManagementModule,

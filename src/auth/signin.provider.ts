@@ -5,6 +5,8 @@ import { UserService } from 'src/user/user.service';
 import { ConfigType } from '@nestjs/config';
 import jwtConfig from './config/jwt.config';
 import { SignInDto } from './dtos/signin.dto';
+import { ActiveUserData } from './interfaces/active-user-data.interface';
+import { GenerateTokensProvider } from './generate-tokens.provider';
 
 @Injectable()
 export class SignInProvider {
@@ -15,6 +17,8 @@ export class SignInProvider {
 
     @Inject(jwtConfig.KEY)
     private readonly jwtConfiguration: ConfigType<typeof jwtConfig>,
+
+    private readonly generateTokensProvider: GenerateTokensProvider,
   ) {}
 
   async signIn(signInDto: SignInDto) {
@@ -37,19 +41,6 @@ export class SignInProvider {
       return { message: 'Password is incorrect' };
     }
 
-    const accessToken = await this.jwtService.signAsync(
-      {
-        sub: user.user_id,
-        phone: user.phone,
-        role: user.role,
-      },
-      {
-        audience: this.jwtConfiguration.audience,
-        issuer: this.jwtConfiguration.issuer,
-        expiresIn: this.jwtConfiguration.accessTokenExpire,
-        secret: this.jwtConfiguration.secret,
-      },
-    );
-    return accessToken;
+    return await this.generateTokensProvider.generateTokens(user);
   }
 }

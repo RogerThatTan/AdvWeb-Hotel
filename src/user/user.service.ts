@@ -89,7 +89,7 @@ export class UserService {
 
       return user ? user : null;
     } catch (error) {
-      return null;
+      return error;
     }
   }
 }
