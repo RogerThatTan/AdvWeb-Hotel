@@ -1,4 +1,11 @@
-import { Entity, Column, PrimaryColumn, OneToMany } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryColumn,
+  OneToMany,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
 import { Booking } from '../../booking/entities/booking.entity';
 import { RoomItem } from './room-item.entity';
 import { HousekeepingHistory } from '../../housekeeping/entities/housekeeping-history.entity';
@@ -45,8 +52,9 @@ export class Rooms {
   @Column({ type: 'enum', enum: HousekeepingStatus })
   housekeeping_status: HousekeepingStatus;
 
-  @OneToMany(() => Booking, (booking) => booking.room)
-  bookings: Booking[];
+  @ManyToOne(() => Booking, (booking) => booking.rooms, { nullable: true })
+  @JoinColumn({ name: 'booking_id' })
+  booking?: Booking;
 
   @OneToMany(() => RoomItem, (roomItem) => roomItem.room)
   roomItems: RoomItem[];
@@ -54,6 +62,9 @@ export class Rooms {
   @OneToMany(() => HousekeepingHistory, (history) => history.room)
   housekeepingHistory: HousekeepingHistory[];
 
-  @OneToMany(() => Reservation, (reservation) => reservation.room)
-  reservations: Reservation[];
+  @ManyToOne(() => Reservation, (reservation) => reservation.rooms, {
+    nullable: true,
+  })
+  @JoinColumn({ name: 'reservation_id' })
+  reservation?: Reservation;
 }

@@ -4,6 +4,7 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
   JoinColumn,
+  OneToMany,
 } from 'typeorm';
 import { User } from '../../user/entities/user.entity';
 import { Rooms } from '../../room/entities/room.entity';
@@ -40,7 +41,9 @@ export class Reservation {
   @JoinColumn({ name: 'user_id' })
   user: User;
 
-  @ManyToOne(() => Rooms, (room) => room.reservations)
-  @JoinColumn({ name: 'room_num' })
-  room: Rooms;
+  @OneToMany(() => Rooms, (room) => room.reservation)
+  rooms: Rooms[];
+
+  @Column()
+  no_of_rooms: number;
 }
