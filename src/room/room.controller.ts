@@ -6,6 +6,9 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Put,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { RoomService } from './room.service';
 import { CreateRoomDto } from './DTOs/create-room.dto';
@@ -52,7 +55,7 @@ export class RoomController {
     );
   }
 
-  @Patch('update/:room_num/status')
+  @Put('update/:room_num/status')
   public updateRoomStatus(
     @Param('room_num', ParseIntPipe) roomNum: number,
     @Body() updateRoomStatusDto: UpdateRoomStatusDto,
@@ -60,7 +63,7 @@ export class RoomController {
     return this.roomService.updateRoomStatus(roomNum, updateRoomStatusDto);
   }
 
-  @Patch('update/:room_num/hk-status')
+  @Put('update/:room_num/hk-status')
   public updateHousekeepingStatus(
     @Param('room_num', ParseIntPipe) roomNum: number,
     @Body() updateHKSDto: UpdateHousekeepingStatusDto,

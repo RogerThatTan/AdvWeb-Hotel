@@ -45,7 +45,7 @@ export class RoomService {
     roomNum: number,
     updateRoomStatusDto: UpdateRoomStatusDto,
   ) {
-    const room = await this.roomRepository.findOneBy({ room_num: roomNum });
+    let room = await this.roomRepository.findOneBy({ room_num: roomNum });
     if (!room) {
       throw new Error('Room not found');
     }
@@ -126,23 +126,31 @@ export class RoomService {
       where: { room: { room_num: roomNum }, item_name: itemName },
       relations: ['room', 'checked_by'],
     });
-    if (!item) throw new NotFoundException(`Item '${itemName}' not found`);
+    if (!item)
+      throw new NotFoundException(
+        `Item '${itemName}' not found in Room ${roomNum}`,
+      );
 
-    // Quick existence checks (optional)
-    if (updateRoomItemDto.room_num) {
-      const roomExists = await this.roomRepository.exist({
-        where: { room_num: updateRoomItemDto.room_num },
+    if (
+      updateRoomItemDto.employee_id &&
+      updateRoomItemDto.employee_id !== item.checked_by.employee_id
+    ) {
+      const employee = await this.employeeRepository.findOneBy({
+        employee_id: updateRoomItemDto.employee_id,
       });
-      if (!roomExists) throw new NotFoundException('Room not found');
+      if (!employee) throw new NotFoundException('Employee not found');
+      item.checked_by = employee;
     }
-
-    if (updateRoomItemDto.employee_id) {
-      const employeeExists = await this.employeeRepository.exist({
-        where: { employee_id: updateRoomItemDto.employee_id },
+    if (
+      updateRoomItemDto.room_num &&
+      updateRoomItemDto.room_num !== item.room.room_num
+    ) {
+      const room = await this.roomRepository.findOneBy({
+        room_num: updateRoomItemDto.room_num,
       });
-      if (!employeeExists) throw new NotFoundException('Employee not found');
+      if (!room) throw new NotFoundException('Room not found');
+      item.room = room;
     }
-
     Object.assign(item, updateRoomItemDto);
     return this.roomItemRepository.save(item);
   }
