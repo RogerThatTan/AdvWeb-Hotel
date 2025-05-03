@@ -12,6 +12,8 @@ import { CreateRoomDto } from './DTOs/create-room.dto';
 import { CreateRoomItemDto } from './DTOs/create-roomItem.dto';
 import { UpdateRoomStatusDto } from './DTOs/update-room-status.dto';
 import { UpdateHousekeepingStatusDto } from './DTOs/hk-status.dto';
+import { ReportItemIssueDto } from './DTOs/report-item-issue.dto';
+import { UpdateRoomItemDto } from './DTOs/update-roomItem.dto';
 
 @Controller('room')
 export class RoomController {
@@ -37,6 +39,19 @@ export class RoomController {
     return this.roomService.createRoomItem(createRoomItemDto);
   }
 
+  @Patch('update/:room_num/:item_name')
+  public updateRoomItem(
+    @Param('room_num', ParseIntPipe) roomNum: number,
+    @Param('item_name') itemName: string,
+    @Body() UpdateRoomItemDto: UpdateRoomItemDto,
+  ) {
+    return this.roomService.updateRoomItem(
+      roomNum,
+      itemName,
+      UpdateRoomItemDto,
+    );
+  }
+
   @Patch('update/:room_num/status')
   public updateRoomStatus(
     @Param('room_num', ParseIntPipe) roomNum: number,
@@ -51,5 +66,14 @@ export class RoomController {
     @Body() updateHKSDto: UpdateHousekeepingStatusDto,
   ) {
     return this.roomService.updateHousekeepingStatus(roomNum, updateHKSDto);
+  }
+
+  @Patch(':room_num/items/:item_name/report-issue')
+  public reportIssue(
+    @Param('room_num', ParseIntPipe) roomNum: number,
+    @Param('item_name') itemName: string,
+    @Body() ReportItemIssueDto: ReportItemIssueDto,
+  ) {
+    return this.roomService.reportIssue(roomNum, itemName, ReportItemIssueDto);
   }
 }
