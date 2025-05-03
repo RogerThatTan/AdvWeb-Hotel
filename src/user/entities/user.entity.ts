@@ -26,38 +26,41 @@ export class User {
   @Column({ type: 'varchar', length: 20, unique: true })
   phone: string;
 
-  @Column({ type: 'text', nullable: true })
-  address?: string;
+  @Column({ type: 'text', nullable: false })
+  address: string;
 
-  @Column({ type: 'varchar', length: 50, nullable: true })
-  nid?: string;
+  @Column({ type: 'varchar', length: 50, nullable: false })
+  nid: string;
 
-  @Column({ type: 'varchar', length: 50, nullable: true })
-  passport?: string;
+  @Column({ type: 'varchar', length: 50, nullable: false })
+  passport: string;
 
-  @Column({ type: 'varchar', length: 50, nullable: true })
+  @Column({ type: 'varchar', length: 50, nullable: false })
   nationality: string;
 
-  @Column({ type: 'varchar', length: 50, nullable: true })
-  Profession?: string;
+  @Column({ type: 'varchar', length: 50, nullable: false })
+  Profession: string;
 
-  @Column({ type: 'integer', nullable: true })
-  age?: number;
+  @Column({ type: 'integer', nullable: false })
+  age: number;
 
-  @Column({ type: 'boolean', nullable: true })
-  maritalStatus?: boolean;
+  @Column({ type: 'boolean', nullable: false })
+  maritalStatus: boolean;
 
   @Column({ type: 'varchar', length: 50, nullable: true })
   vehicleNo?: string;
 
-  @Column({ type: 'varchar', length: 50, nullable: true })
-  fatherName?: string;
+  @Column({ type: 'varchar', length: 50, nullable: false })
+  fatherName: string;
 
   @CreateDateColumn({
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP',
   })
-  RegistrationDate: Date;
+  registrationDate: Date;
+
+  @Column({ type: 'varchar', length: 50, nullable: false, default: 'customer' })
+  role: string;
 
   @OneToMany(() => Booking, (booking) => booking.user)
   bookings: Booking[];
