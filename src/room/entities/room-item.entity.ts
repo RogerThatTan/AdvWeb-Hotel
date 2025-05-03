@@ -31,6 +31,8 @@ export class RoomItem {
   @Column({ type: 'text', nullable: true })
   issue_report?: string;
 
+
+
   @ManyToOne(() => Rooms, (room) => room.roomItems)
   @JoinColumn({ name: 'room_num' })
   room: Rooms;
