@@ -1,4 +1,4 @@
-import { Body, Inject, Injectable } from '@nestjs/common';
+import { Body, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import { Feedback } from './entities/feedback.entity';
@@ -13,10 +13,10 @@ export class FeedbackService {
         @InjectRepository(User)
         private readonly userRepository: Repository<User>,
     ) {}
-    async submitFeedback(@Body() createFeedbackDto: CreateFeedbackDto) {
+    async submitFeedback(createFeedbackDto: CreateFeedbackDto) {
         const user = await this.userRepository.findOneBy({ user_id: createFeedbackDto.user_id });
         if (!user) {
-            throw new Error('User not found');
+            throw new NotFoundException('User not found');
         }
         const feedback = this.feedbackRepository.create(createFeedbackDto);
         feedback.user = user;
@@ -33,7 +33,7 @@ export class FeedbackService {
             relations: ['user'],
         });
         if (!feedback) {
-            throw new Error('Feedback not found for this user');
+            throw new NotFoundException('Feedback not found for this user');
         }
         return feedback;
     }
@@ -45,7 +45,7 @@ export class FeedbackService {
             relations: ['user'],
         });
         if (!feedback) {
-            throw new Error('Feedback not found for this date');
+            throw new NotFoundException('Feedback not found for this date');
         }
         return feedback;
     }

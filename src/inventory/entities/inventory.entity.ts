@@ -15,28 +15,60 @@ export class Inventory {
   @Column({ type: 'varchar', length: 100 })
   item_name: string;
 
-  @Column()
+  @Column({
+    type: 'int',
+    default: 0,
+    nullable: false,
+  })
   quantity: number;
 
-  @Column()
+  @Column({
+    type: 'int',
+    default: 0,
+    nullable: true,
+  })
   issued: number;
 
-  @Column()
+  @Column(
+    {
+      type: 'int',
+      default: 0,
+      nullable: true,
+    }
+  )
   returned: number;
 
-  @Column()
+  @Column(
+    {
+      type: 'int',
+      default: 0,
+      nullable: true,
+    }
+  )
   used: number;
 
-  @Column({ type: 'date' })
+  @Column(
+    {
+      nullable: true,
+    }
+  )
   date: Date;
 
-  @Column()
+  @Column(
+    {
+      type: 'int',
+      default: 0,
+      nullable: true,
+    }
+  )
   ordered: number;
 
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
-  order_price?: number;
+  order_price: number;
 
   @ManyToOne(() => Employee, (employee) => employee.inventories)
   @JoinColumn({ name: 'employee_id' })
   updated_by: Employee;
+
 }
+

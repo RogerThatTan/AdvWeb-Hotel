@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { FeedbackService } from './feedback.service';
 import { CreateFeedbackDto } from './DTOs/create-feedback.dto';
 
@@ -16,11 +16,11 @@ export class FeedbackController {
         return await this.feedbackService.getAllFeedback();
     }
     @Get('user/:user_id')
-    public async getFeedbackByUserId(@Body('user_id') userId: number) {
+    public async getFeedbackByUserId(@Param('user_id') userId: number) {
         return await this.feedbackService.getFeedbackByUserId(userId);
     }
     @Get('date/:date')
-    public async getFeedbackByDate(@Body('date') date: Date) {
+    public async getFeedbackByDate(@Param('date') date: Date) {
         return await this.feedbackService.getFeebackByDate(date);
     }
 
