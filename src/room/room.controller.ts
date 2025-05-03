@@ -1,4 +1,55 @@
-import { Controller } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+} from '@nestjs/common';
+import { RoomService } from './room.service';
+import { CreateRoomDto } from './DTOs/create-room.dto';
+import { CreateRoomItemDto } from './DTOs/create-roomItem.dto';
+import { UpdateRoomStatusDto } from './DTOs/update-room-status.dto';
+import { UpdateHousekeepingStatusDto } from './DTOs/hk-status.dto';
 
 @Controller('room')
-export class RoomController {}
+export class RoomController {
+  constructor(private readonly roomService: RoomService) {}
+
+  @Get('all')
+  public getAllRooms() {
+    return this.roomService.getAllRooms();
+  }
+
+  @Get('by-status/:room_status')
+  public getRoomsByStatus(@Param('room_status') roomStatus: string) {
+    return this.roomService.getRoomsByStatus(roomStatus);
+  }
+
+  @Post('create')
+  public createRoom(@Body() createRoomDto: CreateRoomDto) {
+    return this.roomService.createRoom(createRoomDto);
+  }
+
+  @Post('create-item')
+  public createRoomItem(@Body() createRoomItemDto: CreateRoomItemDto) {
+    return this.roomService.createRoomItem(createRoomItemDto);
+  }
+
+  @Patch('update/:room_num/status')
+  public updateRoomStatus(
+    @Param('room_num', ParseIntPipe) roomNum: number,
+    @Body() updateRoomStatusDto: UpdateRoomStatusDto,
+  ) {
+    return this.roomService.updateRoomStatus(roomNum, updateRoomStatusDto);
+  }
+
+  @Patch('update/:room_num/hk-status')
+  public updateHousekeepingStatus(
+    @Param('room_num', ParseIntPipe) roomNum: number,
+    @Body() updateHKSDto: UpdateHousekeepingStatusDto,
+  ) {
+    return this.roomService.updateHousekeepingStatus(roomNum, updateHKSDto);
+  }
+}
