@@ -5,6 +5,7 @@ import { CouponUsage } from './entities/coupon-usage.entity';
 import { Repository } from 'typeorm';
 import { Employee } from 'src/management/entities/employee.entity';
 import { CreateCouponDto } from './DTOs/create-coupon.dto';
+import { Cron, CronExpression } from '@nestjs/schedule';
 
 @Injectable()
 export class CouponService {
@@ -16,6 +17,16 @@ export class CouponService {
     @InjectRepository(Employee)
     private readonly employeeRepository: Repository<Employee>,
   ) {}
+
+  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
+  async handleExpiredCoupons() {
+    await this.couponRepository
+      .createQueryBuilder()
+      .update(Coupon)
+      .set({ is_active: false })
+      .where('expire_at < NOW() AND is_active = true')
+      .execute();
+  }
 
   public async getAllCoupons() {
     return await this.couponRepository.find();
