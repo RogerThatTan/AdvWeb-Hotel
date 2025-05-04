@@ -27,6 +27,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { AccessTokenGuard } from './auth/guards/access-token/access-token.guard';
 import { AuthenticationGuard } from './auth/guards/authentication/authentication.guard';
 import { RolesGuard } from './auth/guards/roles/roles.guard';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -44,6 +45,7 @@ import { RolesGuard } from './auth/guards/roles/roles.guard';
     FeedbackModule,
     ReservationModule,
     UserModule,
+    ScheduleModule.forRoot(),
     TypeOrmModule.forRootAsync({
       imports: [],
       inject: [],
