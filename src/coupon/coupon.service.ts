@@ -46,7 +46,6 @@ export class CouponService {
         `Coupon with code '${coupon_code}' not found`,
       );
     }
-
     return coupon;
   }
   public async deleteCoupon(coupon_code: string) {
