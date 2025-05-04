@@ -30,5 +30,5 @@ export class CreateCouponDto {
 
   @IsDate()
   @Transform(({ value }) => new Date(value)) // Add proper transformation
-  expire_date: Date;
+  expire_at: Date;
 }
