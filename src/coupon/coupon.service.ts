@@ -18,7 +18,7 @@ export class CouponService {
     private readonly employeeRepository: Repository<Employee>,
   ) {}
 
-  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
+  @Cron(CronExpression.EVERY_30_SECONDS)
   async handleExpiredCoupons() {
     await this.couponRepository
       .createQueryBuilder()
