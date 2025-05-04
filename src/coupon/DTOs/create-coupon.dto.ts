@@ -1,3 +1,4 @@
+import { Transform } from 'class-transformer';
 import {
   IsString,
   IsDecimal,
@@ -8,6 +9,8 @@ import {
   Min,
   Max,
   IsNumber,
+  IsDate,
+  Matches,
 } from 'class-validator';
 
 export class CreateCouponDto {
@@ -34,4 +37,5 @@ export class CreateCouponDto {
   @IsInt()
   @IsNotEmpty()
   employee_id: number;
+
 }

@@ -17,7 +17,10 @@ import { UpdateRoomStatusDto } from './DTOs/update-room-status.dto';
 import { UpdateHousekeepingStatusDto } from './DTOs/hk-status.dto';
 import { ReportItemIssueDto } from './DTOs/report-item-issue.dto';
 import { UpdateRoomItemDto } from './DTOs/update-roomItem.dto';
+import { AuthType } from 'src/auth/enums/auth-type.enum';
+import { Auth } from 'src/auth/decorators/auth.decorator';
 
+@Auth(AuthType.None)
 @Controller('room')
 export class RoomController {
   constructor(private readonly roomService: RoomService) {}

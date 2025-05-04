@@ -1,19 +1,18 @@
-import { IsNotEmpty, IsNumber, IsPositive } from "class-validator";
+import { IsNotEmpty, IsNumber, IsPositive } from 'class-validator';
 
-export class OrderItemDto
-{
-    @IsNotEmpty()
-    @IsPositive()
-    @IsNumber()
-    quantity: number;
-    
-    @IsNotEmpty()
-    @IsPositive()
-    @IsNumber()
-    order_price: number
+export class OrderItemDto {
+  @IsNotEmpty()
+  @IsPositive()
+  @IsNumber()
+  ordered: number;
 
-    @IsNotEmpty()
-    @IsNumber()
-    @IsPositive()
-    employee_id: number;
+  @IsNotEmpty()
+  @IsPositive()
+  @IsNumber()
+  order_price: number;
+
+  @IsNotEmpty()
+  @IsNumber()
+  @IsPositive()
+  employee_id: number;
 }

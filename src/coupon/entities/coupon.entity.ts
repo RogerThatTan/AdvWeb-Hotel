@@ -6,6 +6,8 @@ import {
   OneToMany,
   JoinColumn,
   CreateDateColumn,
+  BeforeInsert,
+  BeforeUpdate,
 } from 'typeorm';
 import { Employee } from '../../management/entities/employee.entity';
 import { Booking } from '../../booking/entities/booking.entity';

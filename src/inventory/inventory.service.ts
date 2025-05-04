@@ -98,8 +98,8 @@ export class InventoryService {
         if (!employee) {
             throw new NotFoundException('Employee not found');
         }
-        inventory.ordered += orderItemDto.quantity;
-        inventory.quantity = inventory.quantity + orderItemDto.quantity;
+        inventory.ordered += orderItemDto.ordered;
+        inventory.quantity = inventory.quantity + orderItemDto.ordered;
         inventory.order_price = orderItemDto.order_price;
         Object.assign(inventory, orderItemDto);
         return await this.inventoryRepository.save(inventory);

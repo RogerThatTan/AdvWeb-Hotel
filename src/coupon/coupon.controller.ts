@@ -1,7 +1,10 @@
 import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { CouponService } from './coupon.service';
 import { CreateCouponDto } from './DTOs/create-coupon.dto';
+import { Auth } from 'src/auth/decorators/auth.decorator';
+import { AuthType } from 'src/auth/enums/auth-type.enum';
 
+@Auth(AuthType.None)
 @Controller('coupon')
 export class CouponController {
   constructor(private readonly couponService: CouponService) {}
