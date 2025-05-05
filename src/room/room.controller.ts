@@ -7,6 +7,7 @@ import {
   Patch,
   Post,
   Put,
+  Query,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -19,6 +20,7 @@ import { ReportItemIssueDto } from './DTOs/report-item-issue.dto';
 import { UpdateRoomItemDto } from './DTOs/update-roomItem.dto';
 import { AuthType } from 'src/auth/enums/auth-type.enum';
 import { Auth } from 'src/auth/decorators/auth.decorator';
+import { GetRoomsDto } from './DTOs/get-rooms-dto';
 
 @Auth(AuthType.None)
 @Controller('room')
@@ -26,8 +28,8 @@ export class RoomController {
   constructor(private readonly roomService: RoomService) {}
 
   @Get('all')
-  public getAllRooms() {
-    return this.roomService.getAllRooms();
+  public getAllRooms(@Query() roomQuery: GetRoomsDto) {
+    return this.roomService.getAllRooms(roomQuery);
   }
 
   @Get('by-status/:room_status')

@@ -5,11 +5,16 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { RoomItem } from './entities/room-item.entity';
 import { Rooms } from './entities/room.entity';
 import { ManagementModule } from '../management/management.module';
+import { PaginationModule } from 'src/common/pagination/pagination.module';
 
 @Module({
   controllers: [RoomController],
   providers: [RoomService],
-  imports: [TypeOrmModule.forFeature([RoomItem, Rooms]), ManagementModule],
+  imports: [
+    TypeOrmModule.forFeature([RoomItem, Rooms]),
+    ManagementModule,
+    PaginationModule,
+  ],
   exports: [TypeOrmModule],
 })
-export class RoomModule { }
+export class RoomModule {}
