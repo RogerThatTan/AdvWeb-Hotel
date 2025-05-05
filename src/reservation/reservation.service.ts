@@ -81,7 +81,6 @@ export class ReservationService {
 
     const timeDifference = checkout_date.getTime() - checkin_date.getTime();
 
-    // Convert the time difference from milliseconds to days
     const numberOfDays = timeDifference / (1000 * 3600 * 24); // 1000 ms * 3600 s * 24 hours
 
     let totalPrice = 0;
