@@ -11,6 +11,9 @@ import { UpdateHousekeepingStatusDto } from './DTOs/hk-status.dto';
 import { ReportItemIssueDto } from './DTOs/report-item-issue.dto';
 import { Employee } from 'src/management/entities/employee.entity';
 import { UpdateRoomItemDto } from './DTOs/update-roomItem.dto';
+import { GetRoomsDto } from './DTOs/get-rooms-dto';
+import { Paginated } from 'src/common/pagination/interfaces/paginated.interface';
+import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
 
 @Injectable()
 export class RoomService {
@@ -21,12 +24,18 @@ export class RoomService {
     private readonly roomItemRepository: Repository<RoomItem>,
     @InjectRepository(Employee)
     private employeeRepository: Repository<Employee>,
+    private readonly paginationProvider: PaginationProvider,
   ) {}
 
-  public async getAllRooms() {
-    return await this.roomRepository.find({
-      relations: ['roomItems'],
-    });
+  public async getAllRooms(roomQuery: GetRoomsDto): Promise<Paginated<Rooms>> {
+    let rooms = await this.paginationProvider.paginateQuery(
+      {
+        limit: roomQuery.limit,
+        page: roomQuery.page,
+      },
+      this.roomRepository,
+    );
+    return rooms;
   }
 
   public async getRoomsByStatus(roomStatus: any) {
