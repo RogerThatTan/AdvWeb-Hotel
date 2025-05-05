@@ -35,13 +35,12 @@ export class Coupon {
 
   @BeforeInsert()
   setInitialActiveStatus() {
-    this.is_active = true; // Always active when created
-    this.created_at = new Date(); // Optional if not using default column
+    this.is_active = true; 
+    this.created_at = new Date(); 
   }
 
   @BeforeUpdate()
   updateActiveStatus() {
-    // Automatically deactivate if expired
     if (new Date() >= this.expire_at) {
       this.is_active = false;
     }

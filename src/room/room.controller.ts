@@ -21,32 +21,37 @@ import { UpdateRoomItemDto } from './DTOs/update-roomItem.dto';
 import { AuthType } from 'src/auth/enums/auth-type.enum';
 import { Auth } from 'src/auth/decorators/auth.decorator';
 import { GetRoomsDto } from './DTOs/get-rooms-dto';
+import { Roles } from 'src/auth/decorators/roles.decorator';
 
-@Auth(AuthType.None)
 @Controller('room')
 export class RoomController {
   constructor(private readonly roomService: RoomService) {}
 
+  @Roles('admin', 'customer')
   @Get('all')
   public getAllRooms(@Query() roomQuery: GetRoomsDto) {
     return this.roomService.getAllRooms(roomQuery);
   }
 
+  @Roles('admin', 'customer')
   @Get('by-status/:room_status')
   public getRoomsByStatus(@Param('room_status') roomStatus: string) {
     return this.roomService.getRoomsByStatus(roomStatus);
   }
 
+  @Roles('admin')
   @Post('create')
   public createRoom(@Body() createRoomDto: CreateRoomDto) {
     return this.roomService.createRoom(createRoomDto);
   }
 
+  @Roles('admin')
   @Post('create-item')
   public createRoomItem(@Body() createRoomItemDto: CreateRoomItemDto) {
     return this.roomService.createRoomItem(createRoomItemDto);
   }
 
+  @Roles('admin')
   @Patch('update/:room_num/:item_name')
   public updateRoomItem(
     @Param('room_num', ParseIntPipe) roomNum: number,
@@ -60,6 +65,7 @@ export class RoomController {
     );
   }
 
+  @Roles('admin')
   @Put('update/:room_num/status')
   public updateRoomStatus(
     @Param('room_num', ParseIntPipe) roomNum: number,
@@ -68,6 +74,7 @@ export class RoomController {
     return this.roomService.updateRoomStatus(roomNum, updateRoomStatusDto);
   }
 
+  @Roles('admin', 'customer')
   @Put('update/:room_num/hk-status')
   public updateHousekeepingStatus(
     @Param('room_num', ParseIntPipe) roomNum: number,
@@ -76,6 +83,7 @@ export class RoomController {
     return this.roomService.updateHousekeepingStatus(roomNum, updateHKSDto);
   }
 
+  @Roles('admin', 'customer')
   @Patch(':room_num/items/:item_name/report-issue')
   public reportIssue(
     @Param('room_num', ParseIntPipe) roomNum: number,
