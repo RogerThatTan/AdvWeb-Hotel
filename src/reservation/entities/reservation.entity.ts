@@ -28,7 +28,7 @@ export class Reservation {
   @Column()
   number_of_guests: number;
 
-  @Column({ type: 'decimal', precision: 10, scale: 2 })
+  @Column({ type: 'int', nullable: false })
   room_price: number;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
@@ -37,6 +37,12 @@ export class Reservation {
   @Column({ type: 'enum', enum: TypeOfBooking })
   typeOfBooking: TypeOfBooking;
 
+  @Column({ type: 'varchar', nullable: false, length: 50 })
+  phone: string;
+
+  @Column({ type: 'int', nullable: false })
+  user_id: number;
+
   @ManyToOne(() => User, (user) => user.reservations)
   @JoinColumn({ name: 'user_id' })
   user: User;
@@ -44,6 +50,6 @@ export class Reservation {
   @OneToMany(() => Rooms, (room) => room.reservation)
   rooms: Rooms[];
 
-  @Column({type: 'int', nullable: false})
+  @Column({ type: 'int', nullable: false })
   no_of_rooms: number;
 }

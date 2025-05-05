@@ -32,7 +32,7 @@ export class UserService {
     try {
       const newUser = this.userRepository.create(validUser);
       await this.userRepository.save(newUser);
-      return { message: 'User created successfully', user: newUser };
+      return { user: newUser };
     } catch (error) {
       return { message: 'Error creating user', error };
     }
