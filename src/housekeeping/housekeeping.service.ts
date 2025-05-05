@@ -49,4 +49,21 @@ export class HousekeepingService {
         if (!entry) throw new NotFoundException('Entry not found');
         return this.housekeepingRepo.remove(entry);
     }
+    public async findByRoomNum(room_num: number) {
+        return this.housekeepingRepo.find({
+            where: {
+                room: { room_num },
+            },
+            relations: ['room', 'cleaned_by', 'supervisor', 'booking'],
+        });
+    }
+    public async reportIssue(id: number, issue: string) {
+        const entry = await this.housekeepingRepo.findOneBy({ housekeeping_id: id });
+        if (!entry) throw new NotFoundException('Housekeeping entry not found');
+
+        entry.issue_report = issue;
+        return this.housekeepingRepo.save(entry);
+    }
+
+
 }

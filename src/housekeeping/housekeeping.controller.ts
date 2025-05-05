@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Param, Delete } from '@nestjs/common';
+import { Body, Controller, Get, Post, Param, Delete, ParseIntPipe, Patch } from '@nestjs/common';
 import { HousekeepingService } from './housekeeping.service';
 import { CreateHousekeepingDto } from './DTOs/create-housekeeping.dto';
 import { Auth } from 'src/auth/decorators/auth.decorator';
@@ -23,6 +23,19 @@ export class HousekeepingController {
     findOne(@Param('id') id: number) {
         return this.housekeepingService.findOne(+id);
     }
+    @Get('room/:roomNum')
+    findByRoom(@Param('roomNum', ParseIntPipe) roomNum: number) {
+        return this.housekeepingService.findByRoomNum(roomNum);
+    }
+
+    @Patch(':id/report-issue')
+    async reportIssue(
+        @Param('id', ParseIntPipe) id: number,
+        @Body('issue_report') issue: string,
+    ) {
+        return this.housekeepingService.reportIssue(id, issue);
+    }
+
 
     @Delete(':id')
     remove(@Param('id') id: number) {
