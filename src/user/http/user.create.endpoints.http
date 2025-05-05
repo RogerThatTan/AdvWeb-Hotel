@@ -1,0 +1,102 @@
+POST http://localhost:3000/user/createUser
+Content-Type: application/json
+
+{
+    "name": "Tanvir Hassan",
+  "email": "tanvir@gmail.com",
+  "password": "Root@123",
+  "phone": "+8801915658970",
+  "address": "Another Address, Dhaka",
+  "nid": "BBBBBBBBBBBB",
+  "passport": "HYYYYYYYY",
+  "nationality": "Bangladeshi",
+  "Profession": "Teacher",
+  "age": 31,
+  "maritalStatus": true,
+  "vehicleNo": null,
+  "fatherName": "Ali Hossain",
+  "registrationDate": "2025-05-05T23:35:00.000Z"
+  }
+
+
+
+#   {
+#     "name": "Ayesha Khan",
+#     "email": "ayesha@example.com",
+#     "password": "Root@123",
+#     "phone": "+8801711223344",
+#     "address": "456 Park Avenue, Dhaka",
+#     "nid": "9876543210",
+#     "passport": "B7654321",
+#     "nationality": "Bangladeshi",
+#     "Profession": "Data Scientist",
+#     "age": 28,
+#     "maritalStatus": false,
+#     "vehicleNo": "CTG-5678",
+#     "fatherName": "Salim Khan",
+#     "registrationDate": "2025-05-04T09:15:00.000Z"
+#   },
+#   {
+#     "name": "Faisal Ahmed",
+#     "email": "faisal@example.com",
+#     "password": "Root@123",
+#     "phone": "+8801999887766",
+#     "address": "789 Gulshan Road, Dhaka",
+#     "nid": "1122334455",
+#     "passport": "C2345678",
+#     "nationality": "Bangladeshi",
+#     "Profession": "Web Developer",
+#     "age": 32,
+#     "maritalStatus": true,
+#     "vehicleNo": "DHK-9012",
+#     "fatherName": "Kamal Ahmed",
+#     "registrationDate": "2025-05-04T14:45:00.000Z"
+#   },
+#   {
+#     "name": "Taslima Begum",
+#     "email": "taslima@example.com",
+#     "password": "Root@123",
+#     "phone": "+8801677889900",
+#     "address": "101 Banani, Dhaka",
+#     "nid": "5544332211",
+#     "passport": "D8765432",
+#     "nationality": "Bangladeshi",
+#     "Profession": "UX Designer",
+#     "age": 26,
+#     "maritalStatus": false,
+#     "vehicleNo": "RAJ-3456",
+#     "fatherName": "Karim Mia",
+#     "registrationDate": "2025-05-05T11:00:00.000Z"
+#   },
+#   {
+#     "name": "Imran Hossain",
+#     "email": "imran@example.com",
+#     "password": "Root@123",
+#     "phone": "+8801555667788",
+#     "address": "222 Mirpur, Dhaka",
+#     "nid": "3322110099",
+#     "passport": "E3456789",
+#     "nationality": "Bangladeshi",
+#     "Profession": "Mobile App Developer",
+#     "age": 35,
+#     "maritalStatus": true,
+#     "vehicleNo": "DHK-6789",
+#     "fatherName": "Jalal Hossain",
+#     "registrationDate": "2025-05-05T19:30:00.000Z"
+#   },
+#   {
+#     "name": "Sadia Rahman",
+#     "email": "sadia@example.com",
+#     "password": "Root@123",
+#     "phone": "+8801333445566",
+#     "address": "333 Dhanmondi, Dhaka",
+#     "nid": "7788990011",
+#     "passport": "F9876543",
+#     "nationality": "Bangladeshi",
+#     "Profession": "Business Analyst",
+#     "age": 29,
+#     "maritalStatus": false,
+#     "vehicleNo": "KHL-0123",
+#     "fatherName": "Farid Rahman",
+#     "registrationDate": "2025-05-05T22:15:00.000Z"
+#   }
