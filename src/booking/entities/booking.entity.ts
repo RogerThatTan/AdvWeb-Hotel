@@ -63,8 +63,8 @@ export class Booking {
 
   @OneToMany(() => Rooms, (room) => room.booking)
   rooms: Rooms[];
-  
-  @Column()
+
+  @Column({type: 'int', nullable: false})
   no_of_rooms: number;
 
   @ManyToOne(() => User, (user) => user.bookings)

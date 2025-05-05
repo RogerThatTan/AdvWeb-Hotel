@@ -10,8 +10,8 @@ import { User } from '../../user/entities/user.entity';
 import { Rooms } from '../../room/entities/room.entity';
 
 export enum TypeOfBooking {
-  WEBSITE = 'website',
-  SELF = 'self',
+  WEBSITE = 'online',
+  SELF = 'offline',
 }
 
 @Entity('Reservation')
@@ -32,7 +32,7 @@ export class Reservation {
   room_price: number;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  booking_date: Date;
+  reservation_date: Date;
 
   @Column({ type: 'enum', enum: TypeOfBooking })
   typeOfBooking: TypeOfBooking;
@@ -44,6 +44,6 @@ export class Reservation {
   @OneToMany(() => Rooms, (room) => room.reservation)
   rooms: Rooms[];
 
-  @Column()
+  @Column({type: 'int', nullable: false})
   no_of_rooms: number;
 }
