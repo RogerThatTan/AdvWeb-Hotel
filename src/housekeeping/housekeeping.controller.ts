@@ -1,4 +1,28 @@
-import { Controller } from '@nestjs/common';
+import { Body, Controller, Get, Post, Param, Delete } from '@nestjs/common';
+import { HousekeepingService } from './housekeeping.service';
+import { CreateHousekeepingDto } from './DTOs/create-housekeeping.dto';
 
 @Controller('housekeeping')
-export class HousekeepingController {}
+export class HousekeepingController {
+  constructor(private readonly housekeepingService: HousekeepingService) {}
+
+  @Post('create')
+  create(@Body() dto: CreateHousekeepingDto) {
+    return this.housekeepingService.create(dto);
+  }
+
+  @Get('all')
+  findAll() {
+    return this.housekeepingService.findAll();
+  }
+
+  @Get(':id')
+  findOne(@Param('id') id: number) {
+    return this.housekeepingService.findOne(+id);
+  }
+
+  @Delete(':id')
+  remove(@Param('id') id: number) {
+    return this.housekeepingService.remove(+id);
+  }
+}
