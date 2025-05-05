@@ -36,10 +36,6 @@ export class CreateReservationDto {
   @Min(1)
   no_of_rooms: number;
 
-  //   @IsNotEmpty()
-  //   @IsInt()
-  //   user_id: number;
-
   @IsNotEmpty({ each: true })
   @IsInt({ each: true })
   room_num: number[];
