@@ -16,6 +16,16 @@ export class CouponController {
     return this.couponService.getAllCoupons();
   }
 
+  @Get('couponUsage')
+  public getCouponUsage() {
+    return this.couponService.getCouponUsage();
+  }
+
+  @Get('couponUsage/:coupon_code')
+  public getCouponUsageByCode(@Param('coupon_code') coupon_code: string) {
+    return this.couponService.getCouponUsageByCode(coupon_code);
+  }
+
   // @Roles('admin')
   @Post('create')
   public async createCoupon(@Body() createCouponDto: CreateCouponDto) {
