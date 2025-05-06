@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, Param, Patch, Delete } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Patch, Delete, Query } from '@nestjs/common';
 import { BookingService } from './booking.service';
 import { CreateBookingDto } from './DTOs/create-booking.dto';
 import { Auth } from 'src/auth/decorators/auth.decorator';
@@ -13,7 +13,7 @@ export class BookingController {
     findAll() {
         return this.bookingService.findAll();
     }
-    
+
     @Post('create')
     createBooking(@Body() dto: CreateBookingDto) {
         return this.bookingService.createBooking(dto);
@@ -34,4 +34,11 @@ export class BookingController {
     delete(@Param('id') id: number) {
         return this.bookingService.deleteBooking(+id);
     }
+    @Get('calculate/price/:bookingId')
+    calculatePriceFromBooking(@Param('bookingId') bookingId: number) {
+        return this.bookingService.calculatePriceFromBooking(+bookingId);
+    }
+
 }
+
+
