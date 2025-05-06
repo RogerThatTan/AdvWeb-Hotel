@@ -15,6 +15,7 @@ import { GetRoomsDto } from './DTOs/get-rooms-dto';
 import { Paginated } from 'src/common/pagination/interfaces/paginated.interface';
 import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
 import { Reservation } from 'src/reservation/entities/reservation.entity';
+import { Booking } from 'src/booking/entities/booking.entity';
 
 @Injectable()
 export class RoomService {
@@ -165,14 +166,27 @@ export class RoomService {
     return this.roomItemRepository.save(item);
   }
 
-  public async updateReservationId(roomNum: number, reservation_id: number) {
-    let room = await this.roomRepository.findOneBy({ room_num: roomNum });
+  public async updateReservationId(roomNum: number, savedReservation: Reservation) {
+    const room = await this.roomRepository.findOneBy({ room_num: roomNum });
+
     if (!room) {
       throw new NotFoundException(`Room ${roomNum} not found.`);
-    } else {
-      room.reservation_id = reservation_id;
-      room.room_status = RoomStatus.RESERVED;
     }
+
+    room.reservation = savedReservation;
+    room.room_status = RoomStatus.RESERVED;
+    return await this.roomRepository.save(room);
+  }
+
+  public async updateBookingId(roomNum: number, savedBooking: Booking) {
+    const room = await this.roomRepository.findOneBy({ room_num: roomNum });
+
+    if (!room) {
+      throw new NotFoundException(`Room ${roomNum} not found.`);
+    }
+
+    room.booking = savedBooking;
+    room.room_status = RoomStatus.OCCUPIED;
     return await this.roomRepository.save(room);
   }
 }

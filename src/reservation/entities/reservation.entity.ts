@@ -58,4 +58,7 @@ export class Reservation {
 
   @Column({ type: 'varchar', nullable: true, length: 50 })
   coupon_code?: string;
+
+  @OneToMany(() => Rooms, (room) => room.booking)
+  rooms: Rooms[];
 }

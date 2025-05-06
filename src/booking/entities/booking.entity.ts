@@ -22,8 +22,8 @@ export enum PaymentStatus {
 }
 
 export enum TypeOfBooking {
-  WEBSITE = 'website',
-  SELF = 'self',
+  ONLINE = 'online',
+  OFFLINE = 'offline',
 }
 
 @Entity('Booking')
@@ -40,13 +40,13 @@ export class Booking {
   @Column()
   number_of_guests: number;
 
-  @Column({ type: 'decimal', precision: 10, scale: 2 })
+  @Column({ type: 'int', nullable: false })
   room_price: number;
 
   @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
   coupon_percent?: number;
 
-  @Column({ type: 'decimal', precision: 10, scale: 2 })
+  @Column({ type: 'int' })
   total_price: number;
 
   @Column({ type: 'enum', enum: PaymentStatus })
@@ -58,21 +58,17 @@ export class Booking {
   @Column({ type: 'enum', enum: TypeOfBooking })
   typeOfBooking: TypeOfBooking;
 
-  @Column({ type: 'boolean', default: false })
-  service_asked: boolean;
-
   @OneToMany(() => Rooms, (room) => room.booking)
   rooms: Rooms[];
 
-  @Column({type: 'int', nullable: false})
+  @Column({ type: 'int', nullable: false })
   no_of_rooms: number;
 
-  @ManyToOne(() => User, (user) => user.bookings)
-  @JoinColumn({ name: 'user_id' })
-  user: User;
+  @Column({ type: 'varchar', nullable: false })
+  user_phone: string;
 
   @ManyToOne(() => Coupon, (coupon) => coupon.bookings, { nullable: true })
-  @JoinColumn({ name: 'coupon_id' })
+  @JoinColumn({ name: 'coupon_code' })
   coupon?: Coupon;
 
   @ManyToOne(() => Employee, (employee) => employee.bookings, {

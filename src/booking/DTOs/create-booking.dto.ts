@@ -1,25 +1,33 @@
-import { IsDateString, IsInt, IsNumber, IsOptional, IsEnum, IsBoolean } from 'class-validator';
+import {
+  IsDateString,
+  IsInt,
+  IsNumber,
+  IsOptional,
+  IsEnum,
+  IsBoolean,
+  IsPhoneNumber,
+  IsNotEmpty,
+  IsDate,
+  IsArray,
+} from 'class-validator';
 import { PaymentStatus, TypeOfBooking } from '../entities/booking.entity';
+import { Type } from 'class-transformer';
 
 export class CreateBookingDto {
-  @IsDateString()
-  checkin_date: string;
+  @IsDate()
+  @Type(() => Date)
+  checkin_date: Date;
 
-  @IsDateString()
-  checkout_date: string;
+  @IsDate()
+  @Type(() => Date)
+  checkout_date: Date;
 
   @IsInt()
   number_of_guests: number;
 
-  @IsNumber()
-  room_price: number;
-
   @IsOptional()
   @IsNumber()
   coupon_percent?: number;
-
-  @IsNumber()
-  total_price: number;
 
   @IsEnum(PaymentStatus)
   payment_status: PaymentStatus;
@@ -27,20 +35,21 @@ export class CreateBookingDto {
   @IsEnum(TypeOfBooking)
   typeOfBooking: TypeOfBooking;
 
-  @IsBoolean()
-  service_asked: boolean;
-
   @IsInt()
   no_of_rooms: number;
 
-  @IsInt()
-  user_id: number;
+  @IsArray()
+  @IsInt({ each: true })
+  room_num: number[];
 
   @IsOptional()
-  @IsInt()
-  coupon_id?: number;
+  coupon_code?: string;
 
   @IsOptional()
   @IsInt()
   employee_id?: number;
+
+  @IsPhoneNumber('BD')
+  @IsNotEmpty()
+  user_phone: string;
 }

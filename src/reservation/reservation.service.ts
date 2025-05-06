@@ -138,7 +138,8 @@ export class ReservationService {
 
     const newReservation = this.reservationRepository.create(reservation);
 
-    const reservationFromDB = this.reservationRepository.save(newReservation);
+    const reservationFromDB =
+      await this.reservationRepository.save(newReservation);
 
     const sendBack = {
       ...reservation,
@@ -150,12 +151,12 @@ export class ReservationService {
       if (room?.room_num) {
         await this.roomService.updateReservationId(
           room.room_num,
-          (await reservationFromDB).reservation_id,
+          reservationFromDB,
         );
       }
     });
 
-    return `Reservation created successfully! Your reservation is ${JSON.stringify(sendBack)}`;
+    return sendBack;
 
     // update in room table -> reservation_id
   }

@@ -62,8 +62,8 @@ export class User {
   @Column({ type: 'varchar', length: 50, nullable: false, default: 'customer' })
   role: string;
 
-  @OneToMany(() => Booking, (booking) => booking.user)
-  bookings: Booking[];
+  // @OneToMany(() => Booking, (booking) => booking.user)
+  // bookings: Booking[];
 
   @OneToMany(() => Feedback, (feedback) => feedback.user)
   feedbacks: Feedback[];

@@ -34,10 +34,6 @@ export class BookingController {
     delete(@Param('id') id: number) {
         return this.bookingService.deleteBooking(+id);
     }
-    @Get('calculate/price/:bookingId')
-    calculatePriceFromBooking(@Param('bookingId') bookingId: number) {
-        return this.bookingService.calculatePriceFromBooking(+bookingId);
-    }
 
 }
 

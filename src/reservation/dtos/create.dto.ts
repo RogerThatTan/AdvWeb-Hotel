@@ -39,7 +39,6 @@ export class CreateReservationDto {
   no_of_rooms: number;
 
   @IsNotEmpty({ each: true })
-  @IsInt({ each: true })
   room_num: number[];
 
   @IsNotEmpty()

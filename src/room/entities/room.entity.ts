@@ -63,6 +63,9 @@ export class Rooms {
   @OneToMany(() => HousekeepingHistory, (history) => history.room)
   housekeepingHistory: HousekeepingHistory[];
 
-  @Column({ type: 'int', nullable: true })
-  reservation_id?: number;
+  @ManyToOne(() => Reservation, (reservation) => reservation.rooms, {
+    nullable: true,
+  })
+  @JoinColumn({ name: 'reservation_id' })
+  reservation?: Reservation;
 }
