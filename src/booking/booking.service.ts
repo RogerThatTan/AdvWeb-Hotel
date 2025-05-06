@@ -57,8 +57,27 @@ export class BookingService {
     return this.bookingRepo.remove(booking);
   }
 
-  calculatePrice(basePrice: number, nights: number, couponPercent?: number) {
-    const discount = couponPercent ? couponPercent / 100 : 0;
-    return basePrice * nights * (1 - discount);
+  async calculatePriceFromBooking(bookingId: number): Promise<{ total_price: number }> {
+    const booking = await this.bookingRepo.findOne({
+      where: { booking_id: bookingId },
+      relations: ['coupon'],
+    });
+  
+    if (!booking) {
+      throw new NotFoundException('Booking not found');
+    }
+  
+    const checkin = new Date(booking.checkin_date);
+    const checkout = new Date(booking.checkout_date);
+    const nights = Math.ceil((checkout.getTime() - checkin.getTime()) / (1000 * 60 * 60 * 24));
+  
+    const basePrice = booking.room_price;
+    const couponPercent = booking.coupon?.coupon_percent ?? 0;
+  
+    const discount = couponPercent / 100;
+    const total_price = basePrice * nights * (1 - discount);
+  
+    return { total_price };
   }
+  
 }
