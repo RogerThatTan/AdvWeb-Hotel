@@ -11,6 +11,7 @@ import {
   IsNumber,
   IsDate,
   Matches,
+  IsIn,
 } from 'class-validator';
 
 export class CreateCouponDto {
@@ -25,10 +26,13 @@ export class CreateCouponDto {
   coupon_percent: number;
 
   @IsInt()
+  quantity: number;
+
+  @IsInt()
   @IsNotEmpty()
   employee_id: number;
 
   @IsDate()
-  @Transform(({ value }) => new Date(value)) // Add proper transformation
+  @Transform(({ value }) => new Date(value))
   expire_at: Date;
 }

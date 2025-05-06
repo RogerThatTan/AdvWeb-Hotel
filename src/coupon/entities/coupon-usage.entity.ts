@@ -27,5 +27,5 @@ export class CouponUsage {
 
   @ManyToOne(() => Employee, (employee) => employee.couponUsages)
   @JoinColumn({ name: 'employee_id' })
-  used_by: Employee;
+  used_by?: Employee;
 }

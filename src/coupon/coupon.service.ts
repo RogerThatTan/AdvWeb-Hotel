@@ -18,13 +18,13 @@ export class CouponService {
     private readonly employeeRepository: Repository<Employee>,
   ) {}
 
-  @Cron(CronExpression.EVERY_30_SECONDS)
+  @Cron(CronExpression.EVERY_5_MINUTES)
   async handleExpiredCoupons() {
     await this.couponRepository
       .createQueryBuilder()
       .update(Coupon)
       .set({ is_active: false })
-      .where('expire_at < NOW() AND is_active = true')
+      .where('(expire_at < NOW() OR quantity <= 0) AND is_active = true')
       .execute();
   }
 

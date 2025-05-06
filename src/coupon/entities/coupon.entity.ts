@@ -27,6 +27,9 @@ export class Coupon {
   @Column({ type: 'boolean' })
   is_active: boolean;
 
+  @Column()
+  quantity: number;
+
   @CreateDateColumn()
   created_at: Date;
 
@@ -35,13 +38,16 @@ export class Coupon {
 
   @BeforeInsert()
   setInitialActiveStatus() {
-    this.is_active = true; 
-    this.created_at = new Date(); 
+    this.is_active = true;
+    this.created_at = new Date();
   }
 
   @BeforeUpdate()
   updateActiveStatus() {
     if (new Date() >= this.expire_at) {
+      this.is_active = false;
+    }
+    if (this.quantity <= 0) {
       this.is_active = false;
     }
   }
