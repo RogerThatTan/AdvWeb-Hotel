@@ -29,6 +29,7 @@ import { RolesGuard } from './auth/guards/roles/roles.guard';
 import { ScheduleModule } from '@nestjs/schedule';
 import { EmailModule } from './email/email.module';
 import { ConfigModule } from '@nestjs/config';
+import { PdfModule } from './pdf/pdf.module';
 
 @Module({
   imports: [
@@ -68,6 +69,7 @@ import { ConfigModule } from '@nestjs/config';
     JwtModule.registerAsync(jwtConfig.asProvider()),
     EmailModule,
     ConfigModule.forRoot(),
+    PdfModule,
   ],
   controllers: [AppController],
   providers: [

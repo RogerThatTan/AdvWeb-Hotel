@@ -4,6 +4,7 @@ import {
   Injectable,
   ParseIntPipe,
 } from '@nestjs/common';
+import { Response } from 'express';
 import { CreateReservationDto } from './dtos/create.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Reservation, TypeOfBooking } from './entities/reservation.entity';
@@ -15,6 +16,11 @@ import { CouponService } from 'src/coupon/coupon.service';
 import { RoomService } from 'src/room/room.service';
 import { Booking, PaymentStatus } from 'src/booking/entities/booking.entity';
 import { BookingService } from 'src/booking/booking.service';
+import { PdfService } from 'src/pdf/pdf.service';
+
+import { writeFile } from 'fs/promises';
+import * as path from 'path';
+import { mkdir } from 'fs/promises';
 
 @Injectable()
 export class ReservationService {
@@ -31,10 +37,14 @@ export class ReservationService {
     public readonly userService: UserService,
     public readonly couponService: CouponService,
     public readonly roomService: RoomService,
+    private readonly pdfService: PdfService,
     // public readonly bookingService: BookingService,
   ) {}
 
-  async createReservation(createReservationDto: CreateReservationDto) {
+  async createReservation(
+    createReservationDto: CreateReservationDto,
+    res: Response,
+  ) {
     const {
       checkin_date,
       checkout_date,
@@ -160,6 +170,40 @@ export class ReservationService {
         );
       }
     });
+
+    const pdfBuffer = await this.pdfService.generateReservationPdf(
+      reservationFromDB,
+      null,
+    );
+
+    await mkdir(path.join(__dirname, '..', '..', 'pdfs'), { recursive: true });
+
+    const pdfDir = path.join(__dirname, '..', '..', 'pdfs');
+    await mkdir(pdfDir, { recursive: true });
+
+    const filePath = path.join(
+      __dirname,
+      '..',
+      '..',
+      'pdfs',
+      `reservation-${reservationFromDB.reservation_id}.pdf`,
+    );
+
+    await writeFile(filePath, pdfBuffer);
+    console.log(`PDF saved to ${filePath}`);
+
+    if (res) {
+      res.set({
+        'Content-Type': 'application/pdf',
+        'Content-Disposition': `attachment; filename=reservation-${
+          reservationFromDB.reservation_id
+        }.pdf`,
+        'Content-Length': pdfBuffer.length,
+      });
+      res.end(pdfBuffer);
+    } else {
+      throw new Error('Response object is undefined');
+    }
 
     return sendBack;
   }

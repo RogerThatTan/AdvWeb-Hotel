@@ -8,6 +8,7 @@ import { RoomModule } from '../room/room.module';
 import { CouponService } from 'src/coupon/coupon.service';
 import { CouponModule } from 'src/coupon/coupon.module';
 import { BookingModule } from 'src/booking/booking.module';
+import { PdfModule } from 'src/pdf/pdf.module';
 
 @Module({
   controllers: [ReservationController],
@@ -18,6 +19,7 @@ import { BookingModule } from 'src/booking/booking.module';
     RoomModule,
     CouponModule,
     BookingModule,
+    PdfModule,
   ],
   exports: [ReservationService],
 })
