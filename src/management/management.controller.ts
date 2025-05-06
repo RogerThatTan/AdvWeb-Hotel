@@ -32,6 +32,11 @@ export class ManagementController {
     public deleteEmployee(@Param('employee_id', ParseIntPipe) employeeId: number) {
         return this.managementService.deleteEmployee(employeeId);
     }
+
+    @Get('/employee/:employee_id')
+    public getEmployeeById(@Param('employee_id', ParseIntPipe) employeeId: number) {
+        return this.managementService.getEmployeeById(employeeId);
+    }
 }
 
 

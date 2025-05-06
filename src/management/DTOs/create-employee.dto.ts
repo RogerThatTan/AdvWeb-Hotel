@@ -1,4 +1,4 @@
-import { IsDate, IsEnum, IsNotEmpty, IsOptional, IsString } from "class-validator";
+import { IsDate, IsEnum, IsNotEmpty, IsOptional, IsPhoneNumber, IsString } from "class-validator";
 
 export enum EmployeeRole {
     ADMIN = 'admin',
@@ -32,6 +32,7 @@ export enum EmployeeRole {
 
     @IsNotEmpty()
     @IsString()
+    @IsPhoneNumber('BD')
     phone: string;
 
     @IsOptional()
@@ -42,5 +43,6 @@ export enum EmployeeRole {
     hire_date: Date;
 
     @IsEnum(EmployeeStatus)
+    @IsNotEmpty()
     status: EmployeeStatus = EmployeeStatus.ACTIVE;
   }

@@ -1,4 +1,4 @@
-import { IsEnum, IsOptional, IsString } from "class-validator";
+import { IsEnum, IsOptional, IsPhoneNumber, IsString } from "class-validator";
 import { EmployeeRole, EmployeeStatus } from "./create-employee.dto";
 
 export class UpdateEmployeeDto
@@ -13,6 +13,7 @@ export class UpdateEmployeeDto
 
     @IsOptional()
     @IsString()
+    @IsPhoneNumber('BD')
     phone?: string;
 
     //@IsOptional()
