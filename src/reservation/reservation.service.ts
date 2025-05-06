@@ -12,6 +12,7 @@ import { UserService } from 'src/user/user.service';
 import { Rooms, RoomStatus } from 'src/room/entities/room.entity';
 import { User } from 'src/user/entities/user.entity';
 import { CouponService } from 'src/coupon/coupon.service';
+import { RoomService } from 'src/room/room.service';
 
 @Injectable()
 export class ReservationService {
@@ -25,6 +26,7 @@ export class ReservationService {
 
     public readonly userService: UserService,
     public readonly couponService: CouponService,
+    public readonly roomService: RoomService,
   ) {}
 
   async createReservation(createReservationDto: CreateReservationDto) {
@@ -73,10 +75,11 @@ export class ReservationService {
       }
       if (
         room.room_status === RoomStatus.OCCUPIED ||
-        room.room_status === RoomStatus.MAINTENANCE
+        room.room_status === RoomStatus.MAINTENANCE ||
+        room.room_status === RoomStatus.RESERVED
       ) {
         throw new HttpException(
-          `Room with number ${room.room_num} is already occupied or under maintenance.`,
+          `Room with number ${room.room_num} is already occupied or under maintenance or reserved.`,
           HttpStatus.BAD_REQUEST,
         );
       }
@@ -135,7 +138,7 @@ export class ReservationService {
 
     const newReservation = this.reservationRepository.create(reservation);
 
-    this.reservationRepository.save(newReservation);
+    const reservationFromDB = this.reservationRepository.save(newReservation);
 
     const sendBack = {
       ...reservation,
@@ -143,6 +146,17 @@ export class ReservationService {
       totalPrice: totalPrice,
     };
 
+    allRooms.forEach(async (room) => {
+      if (room?.room_num) {
+        await this.roomService.updateReservationId(
+          room.room_num,
+          (await reservationFromDB).reservation_id,
+        );
+      }
+    });
+
     return `Reservation created successfully! Your reservation is ${JSON.stringify(sendBack)}`;
+
+    // update in room table -> reservation_id
   }
 }

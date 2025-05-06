@@ -1,6 +1,6 @@
 import { Body, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Rooms } from './entities/room.entity';
+import { Rooms, RoomStatus } from './entities/room.entity';
 import { Repository } from 'typeorm';
 import { RoomItem } from './entities/room-item.entity';
 import { create } from 'domain';
@@ -14,6 +14,7 @@ import { UpdateRoomItemDto } from './DTOs/update-roomItem.dto';
 import { GetRoomsDto } from './DTOs/get-rooms-dto';
 import { Paginated } from 'src/common/pagination/interfaces/paginated.interface';
 import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
+import { Reservation } from 'src/reservation/entities/reservation.entity';
 
 @Injectable()
 export class RoomService {
@@ -162,5 +163,16 @@ export class RoomService {
     }
     Object.assign(item, updateRoomItemDto);
     return this.roomItemRepository.save(item);
+  }
+
+  public async updateReservationId(roomNum: number, reservation_id: number) {
+    let room = await this.roomRepository.findOneBy({ room_num: roomNum });
+    if (!room) {
+      throw new NotFoundException(`Room ${roomNum} not found.`);
+    } else {
+      room.reservation_id = reservation_id;
+      room.room_status = RoomStatus.RESERVED;
+    }
+    return await this.roomRepository.save(room);
   }
 }

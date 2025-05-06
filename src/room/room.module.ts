@@ -15,6 +15,6 @@ import { PaginationModule } from 'src/common/pagination/pagination.module';
     ManagementModule,
     PaginationModule,
   ],
-  exports: [TypeOrmModule],
+  exports: [TypeOrmModule, RoomService],
 })
 export class RoomModule {}

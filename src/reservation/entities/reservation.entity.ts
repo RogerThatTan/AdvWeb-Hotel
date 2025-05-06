@@ -53,9 +53,6 @@ export class Reservation {
   @JoinColumn({ name: 'user_id' })
   user: User;
 
-  @OneToMany(() => Rooms, (room) => room.reservation)
-  rooms: Rooms[];
-
   @Column({ type: 'int', nullable: false })
   no_of_rooms: number;
 
