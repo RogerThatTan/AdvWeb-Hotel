@@ -32,6 +32,25 @@ export class CouponService {
     return await this.couponRepository.find();
   }
 
+  public async getCouponUsage() {
+    return await this.couponUsageRepository.find({
+      relations: ['coupon', 'booking', 'used_by'],
+    });
+  }
+
+  public async getCouponUsageByCode(coupon_code: string) {
+    const couponUsage = await this.couponUsageRepository.findOne({
+      where: { coupon_code },
+      relations: ['coupon', 'booking', 'used_by'],
+    });
+    if (!couponUsage) {
+      throw new NotFoundException(
+        `Coupon usage with code '${coupon_code}' not found`,
+      );
+    }
+    return couponUsage;
+  }
+
   public async createCoupon(createCouponDto: CreateCouponDto) {
     const employee = await this.employeeRepository.findOne({
       where: { employee_id: createCouponDto.employee_id },

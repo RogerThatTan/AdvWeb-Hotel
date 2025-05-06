@@ -17,6 +17,9 @@ export class CouponUsage {
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   used_at: Date;
 
+  @Column({ type: 'varchar', length: 50, unique: true })
+  coupon_code: string;
+
   @ManyToOne(() => Coupon, (coupon) => coupon.couponUsages)
   @JoinColumn({ name: 'coupon_id' })
   coupon: Coupon;
