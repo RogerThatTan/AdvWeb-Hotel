@@ -11,6 +11,7 @@ import { Repository } from 'typeorm';
 import { UserService } from 'src/user/user.service';
 import { Rooms, RoomStatus } from 'src/room/entities/room.entity';
 import { User } from 'src/user/entities/user.entity';
+import { CouponService } from 'src/coupon/coupon.service';
 
 @Injectable()
 export class ReservationService {
@@ -23,6 +24,7 @@ export class ReservationService {
     private readonly roomRepository: Repository<Rooms>,
 
     public readonly userService: UserService,
+    public readonly couponService: CouponService,
   ) {}
 
   async createReservation(createReservationDto: CreateReservationDto) {
@@ -34,6 +36,7 @@ export class ReservationService {
       no_of_rooms,
       phone,
       room_num,
+      coupon_code,
     } = createReservationDto;
 
     let user = await this.userRepository.findOne({ where: { phone: phone } });
@@ -91,23 +94,55 @@ export class ReservationService {
     });
 
     totalPrice = Math.round(totalPrice * numberOfDays);
+    let couponDiscount = 0;
+    if (coupon_code) {
+      const coupon = await this.couponService.getCouponByCode(coupon_code);
+      if (!coupon) {
+        throw new HttpException(
+          `Coupon with code ${coupon_code} not found.`,
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+      if (coupon?.is_active === false || coupon?.quantity === 0) {
+        throw new HttpException(
+          `Coupon with code ${coupon_code} is expired.`,
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+      couponDiscount = Math.round((totalPrice * coupon?.coupon_percent) / 100);
+      coupon.quantity -= 1;
+      await this.couponService.updateCoupon(
+        coupon.coupon_code,
+        coupon.coupon_id,
+      );
+    }
 
     const reservation = {
       checkin_date,
       checkout_date,
       number_of_guests,
+      total_price:
+        couponDiscount == 0 ? totalPrice : totalPrice - couponDiscount,
       room_price: totalPrice,
+      discount_price: couponDiscount,
+      coupon_code: coupon_code,
       typeOfBooking,
       no_of_rooms,
       phone,
       user_id: user?.user_id,
-      room_num,
+      room_details: allRooms,
     };
 
     const newReservation = this.reservationRepository.create(reservation);
 
     this.reservationRepository.save(newReservation);
 
-    return `Reservation created successfully! Your reservation is ${JSON.stringify(newReservation)}`;
+    const sendBack = {
+      ...reservation,
+      coupon_discount: couponDiscount,
+      totalPrice: totalPrice,
+    };
+
+    return `Reservation created successfully! Your reservation is ${JSON.stringify(sendBack)}`;
   }
 }

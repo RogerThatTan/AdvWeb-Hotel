@@ -15,5 +15,6 @@ import { BookingModule } from '../booking/booking.module';
     ManagementModule,
     forwardRef(() => BookingModule),
   ],
+  exports: [CouponService],
 })
 export class CouponModule {}

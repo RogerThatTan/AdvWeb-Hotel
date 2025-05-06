@@ -69,4 +69,17 @@ export class CouponService {
     await this.couponRepository.remove(coupon);
     return { message: 'Coupon deleted successfully' };
   }
+
+  public async updateCoupon(coupon_code: string, coupon_id: number) {
+    const existingCoupon = await this.couponRepository.findOne({
+      where: { coupon_code },
+    });
+    if (!existingCoupon) {
+      throw new NotFoundException(`Coupon with ID '${coupon_code}' not found`);
+    }
+    await this.couponRepository.update(coupon_id, {
+      ...existingCoupon,
+      quantity: existingCoupon.quantity - 1,
+    });
+  }
 }

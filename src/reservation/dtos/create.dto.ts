@@ -4,8 +4,10 @@ import {
   IsInt,
   IsNotEmpty,
   IsNumber,
+  IsOptional,
   IsPhoneNumber,
   IsPositive,
+  IsString,
   Min,
   ValidateNested,
 } from 'class-validator';
@@ -43,4 +45,8 @@ export class CreateReservationDto {
   @IsNotEmpty()
   @IsPhoneNumber('BD')
   phone: string;
+
+  @IsOptional()
+  coupon_code?: string;
+
 }
