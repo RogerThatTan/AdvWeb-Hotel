@@ -13,4 +13,10 @@ export class ReservationController {
   async createReservation(@Body() createReservationDto: CreateReservationDto) {
     return this.reservationService.createReservation(createReservationDto);
   }
+
+  @Post('confirm')
+  async confirmReservation(@Body() body: { reservation_id: number }) {
+    const { reservation_id } = body;
+    return this.reservationService.confirmReservation(reservation_id);
+  }
 }

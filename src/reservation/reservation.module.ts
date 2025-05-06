@@ -7,11 +7,18 @@ import { UserModule } from '../user/user.module';
 import { RoomModule } from '../room/room.module';
 import { CouponService } from 'src/coupon/coupon.service';
 import { CouponModule } from 'src/coupon/coupon.module';
+import { BookingModule } from 'src/booking/booking.module';
 
 @Module({
   controllers: [ReservationController],
   providers: [ReservationService],
-  imports: [TypeOrmModule.forFeature([Reservation]), UserModule, RoomModule, CouponModule],
+  imports: [
+    TypeOrmModule.forFeature([Reservation]),
+    UserModule,
+    RoomModule,
+    CouponModule,
+    BookingModule,
+  ],
   exports: [ReservationService],
 })
 export class ReservationModule {}

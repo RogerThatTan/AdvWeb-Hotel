@@ -10,8 +10,8 @@ import { User } from '../../user/entities/user.entity';
 import { Rooms } from '../../room/entities/room.entity';
 
 export enum TypeOfBooking {
-  WEBSITE = 'online',
-  SELF = 'offline',
+  ONLINE = 'online',
+  OFFLINE = 'offline',
 }
 
 @Entity('Reservation')

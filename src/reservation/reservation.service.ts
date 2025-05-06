@@ -6,13 +6,15 @@ import {
 } from '@nestjs/common';
 import { CreateReservationDto } from './dtos/create.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Reservation } from './entities/reservation.entity';
-import { Repository } from 'typeorm';
+import { Reservation, TypeOfBooking } from './entities/reservation.entity';
+import { DeepPartial, Repository } from 'typeorm';
 import { UserService } from 'src/user/user.service';
 import { Rooms, RoomStatus } from 'src/room/entities/room.entity';
 import { User } from 'src/user/entities/user.entity';
 import { CouponService } from 'src/coupon/coupon.service';
 import { RoomService } from 'src/room/room.service';
+import { Booking, PaymentStatus } from 'src/booking/entities/booking.entity';
+import { BookingService } from 'src/booking/booking.service';
 
 @Injectable()
 export class ReservationService {
@@ -23,10 +25,13 @@ export class ReservationService {
     private readonly userRepository: Repository<User>,
     @InjectRepository(Rooms)
     private readonly roomRepository: Repository<Rooms>,
+    @InjectRepository(Booking)
+    private readonly bookingRepository: Repository<Booking>,
 
     public readonly userService: UserService,
     public readonly couponService: CouponService,
     public readonly roomService: RoomService,
+    // public readonly bookingService: BookingService,
   ) {}
 
   async createReservation(createReservationDto: CreateReservationDto) {
@@ -157,7 +162,50 @@ export class ReservationService {
     });
 
     return sendBack;
+  }
+  async getReservations(reservationId: number) {
+    return await this.reservationRepository.findOne({
+      where: { reservation_id: reservationId },
+    });
+  }
 
-    // update in room table -> reservation_id
+  async confirmReservation(reservationId: number) {
+    const reservation = await this.getReservations(reservationId);
+
+    if (!reservation) {
+      throw new HttpException(
+        `Reservation with ID ${reservationId} not found.`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    const couponCode = reservation.coupon_code;
+    var coupon;
+    if (couponCode) {
+      coupon = await this.couponService.getCouponByCode(couponCode);
+    }
+
+    const booking = this.bookingRepository.create({
+      checkin_date: reservation.checkin_date,
+      checkout_date: reservation.checkout_date,
+      number_of_guests: reservation.number_of_guests,
+      room_price: reservation.room_price,
+      coupon_percent: coupon?.coupon_percent,
+      total_price: reservation.total_price,
+      payment_status: PaymentStatus.PENDING,
+      booking_date: new Date(),
+      typeOfBooking: reservation.typeOfBooking as TypeOfBooking,
+      no_of_rooms: reservation.no_of_rooms,
+      user_phone: reservation.phone,
+      coupon: coupon ? coupon : null,
+    });
+    const savedBooking = await this.bookingRepository.save(booking);
+
+    const data = await this.roomService.confirmReservation(
+      reservation.reservation_id,
+      booking,
+    );
+
+    return data;
   }
 }

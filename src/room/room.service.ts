@@ -166,7 +166,10 @@ export class RoomService {
     return this.roomItemRepository.save(item);
   }
 
-  public async updateReservationId(roomNum: number, savedReservation: Reservation) {
+  public async updateReservationId(
+    roomNum: number,
+    savedReservation: Reservation,
+  ) {
     const room = await this.roomRepository.findOneBy({ room_num: roomNum });
 
     if (!room) {
@@ -188,5 +191,22 @@ export class RoomService {
     room.booking = savedBooking;
     room.room_status = RoomStatus.OCCUPIED;
     return await this.roomRepository.save(room);
+  }
+
+  public async confirmReservation(reservationId: number, booking: Booking) {
+    const rooms = await this.roomRepository.find({
+      where: { reservation: { reservation_id: reservationId } },
+      relations: ['reservation'],
+    });
+
+    rooms.forEach(async (room) => {
+      if (room?.room_num) {
+        room.room_status = RoomStatus.OCCUPIED;
+        room.booking = booking;
+        await this.roomRepository.save(room);
+      }
+    });
+
+    return rooms;
   }
 }

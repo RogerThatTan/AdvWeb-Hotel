@@ -187,4 +187,8 @@ export class BookingService {
     if (!booking) throw new NotFoundException('Booking not found');
     return this.bookingRepo.remove(booking);
   }
+
+  async confirmReservation(booking: Booking) {
+    
+  }
 }

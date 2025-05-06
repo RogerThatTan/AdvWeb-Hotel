@@ -9,10 +9,16 @@ import { RoomModule } from '../room/room.module';
 import { CouponModule } from '../coupon/coupon.module';
 import { ManagementModule } from '../management/management.module';
 
-
 @Module({
   controllers: [BookingController],
   providers: [BookingService],
-  imports: [TypeOrmModule.forFeature([Accounts, Booking]),UserModule,RoomModule,CouponModule,ManagementModule,],
+  imports: [
+    TypeOrmModule.forFeature([Accounts, Booking]),
+    UserModule,
+    RoomModule,
+    CouponModule,
+    ManagementModule,
+  ],
+  exports: [BookingService, TypeOrmModule],
 })
 export class BookingModule {}
