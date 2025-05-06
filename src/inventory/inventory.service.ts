@@ -17,7 +17,7 @@ export class InventoryService {
         private readonly employeeRepository: Repository<Employee>,
     ) {}
 
-    async createInventory(createInventoryDto: CreateInventoryDto) {
+    public async createInventory(createInventoryDto: CreateInventoryDto) {
         const employee = await this.employeeRepository.findOneBy({ employee_id: createInventoryDto.employee_id });
         if (!employee) {
             throw new NotFoundException('Employee not found');
@@ -29,7 +29,7 @@ export class InventoryService {
 
     }
 
-    async updateInventory(Serial_ID:number, updateInventoryDto: UpdateInventoryDto)
+    public async updateInventory(Serial_ID:number, updateInventoryDto: UpdateInventoryDto)
     {
         const inventory = await this.inventoryRepository.findOneBy({ serial_id: Serial_ID });
         if (!inventory) {
@@ -44,7 +44,7 @@ export class InventoryService {
         return await this.inventoryRepository.save(inventory);
     } 
 
-    async IssueItem(Serial_ID: number, issueItemDto: IssueItemDto)
+    public async IssueItem(Serial_ID: number, issueItemDto: IssueItemDto)
     {
         const inventory = await this.inventoryRepository.findOneBy({ serial_id: Serial_ID });
         if (!inventory) {
@@ -66,7 +66,7 @@ export class InventoryService {
         return await this.inventoryRepository.save(inventory);
     }
 
-    async ReturnItem(Serial_ID: number, returnItemDto: ReturnItemDto)
+    public async ReturnItem(Serial_ID: number, returnItemDto: ReturnItemDto)
     {
         const inventory = await this.inventoryRepository.findOneBy({ serial_id: Serial_ID });
         if (!inventory) {
@@ -88,7 +88,7 @@ export class InventoryService {
         return await this.inventoryRepository.save(inventory);
     }
 
-    async orderItem(Serial_ID: number, orderItemDto: OrderItemDto)
+    public async orderItem(Serial_ID: number, orderItemDto: OrderItemDto)
     {
         const inventory = await this.inventoryRepository.findOneBy({ serial_id: Serial_ID });
         if (!inventory) {
@@ -105,7 +105,7 @@ export class InventoryService {
         return await this.inventoryRepository.save(inventory);
     }
 
-    async getAllInventory()
+    public async getAllInventory()
     {
         return await this.inventoryRepository.find({ relations: ['updated_by'] });
     }
