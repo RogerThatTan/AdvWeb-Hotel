@@ -13,7 +13,7 @@ export class FeedbackService {
         @InjectRepository(User)
         private readonly userRepository: Repository<User>,
     ) {}
-    async submitFeedback(createFeedbackDto: CreateFeedbackDto) {
+    public async submitFeedback(createFeedbackDto: CreateFeedbackDto) {
         const user = await this.userRepository.findOneBy({ user_id: createFeedbackDto.user_id });
         if (!user) {
             throw new NotFoundException('User not found');
@@ -23,11 +23,11 @@ export class FeedbackService {
         return await this.feedbackRepository.save(feedback);
     }
 
-    async getAllFeedback() {
+    public async getAllFeedback() {
         return await this.feedbackRepository.find({ relations: ['user'] });
     }
 
-    async getFeedbackByUserId(userId: number) {
+    public async getFeedbackByUserId(userId: number) {
         const feedback = await this.feedbackRepository.find({
             where: { user: { user_id: userId } },
             relations: ['user'],
@@ -38,7 +38,7 @@ export class FeedbackService {
         return feedback;
     }
 
-    async getFeebackByDate(date: Date)
+    public async getFeebackByDate(date: Date)
     {
         const feedback = await this.feedbackRepository.find({
             where: { date: date },

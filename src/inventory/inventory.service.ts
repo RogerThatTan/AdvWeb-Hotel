@@ -17,7 +17,7 @@ export class InventoryService {
         private readonly employeeRepository: Repository<Employee>,
     ) {}
 
-    async createInventory(@Body() createInventoryDto: CreateInventoryDto) {
+    async createInventory(createInventoryDto: CreateInventoryDto) {
         const employee = await this.employeeRepository.findOneBy({ employee_id: createInventoryDto.employee_id });
         if (!employee) {
             throw new NotFoundException('Employee not found');

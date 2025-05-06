@@ -46,5 +46,12 @@ export class ManagementService {
         return await this.employeeRepository.remove(employee);
     }
 
+    public async getEmployeeById(employeeId: number) {
+        const employee = await this.employeeRepository.findOneBy({employee_id: employeeId});
+        if (!employee) {
+            throw new NotFoundException('Employee not found');
+        }
+        return employee;
+    }    
 
 }
