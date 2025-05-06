@@ -13,7 +13,6 @@ import {
 } from 'class-validator';
 
 export class CreateUserDto {
-
   @IsNotEmpty()
   @MinLength(3)
   @MaxLength(100)
@@ -22,7 +21,7 @@ export class CreateUserDto {
   @IsOptional()
   @IsEmail()
   @MaxLength(100)
-  email?: string;
+  email: string;
 
   @IsNotEmpty()
   @MinLength(8)

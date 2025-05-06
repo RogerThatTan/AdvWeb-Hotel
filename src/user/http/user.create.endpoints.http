@@ -2,10 +2,10 @@ POST http://localhost:3000/user/createUser
 Content-Type: application/json
 
 {
-    "name": "Tanvir Hassan",
-  "email": "tanvir@gmail.com",
+    "name": "Raiyan Sayeed",
+  "email": "raiyansayeed0@gmail.com",
   "password": "Root@123",
-  "phone": "+8801915658970",
+  "phone": "+8801715658970",
   "address": "Another Address, Dhaka",
   "nid": "BBBBBBBBBBBB",
   "passport": "HYYYYYYYY",

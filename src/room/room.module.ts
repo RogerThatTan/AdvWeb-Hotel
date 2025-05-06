@@ -6,6 +6,7 @@ import { RoomItem } from './entities/room-item.entity';
 import { Rooms } from './entities/room.entity';
 import { ManagementModule } from '../management/management.module';
 import { PaginationModule } from 'src/common/pagination/pagination.module';
+import { EmailModule } from 'src/email/email.module';
 
 @Module({
   controllers: [RoomController],
@@ -14,6 +15,7 @@ import { PaginationModule } from 'src/common/pagination/pagination.module';
     TypeOrmModule.forFeature([RoomItem, Rooms]),
     ManagementModule,
     PaginationModule,
+    EmailModule,
   ],
   exports: [TypeOrmModule, RoomService],
 })

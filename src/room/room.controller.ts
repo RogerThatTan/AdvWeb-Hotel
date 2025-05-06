@@ -52,7 +52,7 @@ export class RoomController {
   }
 
   @Roles('admin')
-  @Patch('update/:room_num/:item_name')
+  @Patch('update-room-item/:room_num/:item_name')
   public updateRoomItem(
     @Param('room_num', ParseIntPipe) roomNum: number,
     @Param('item_name') itemName: string,
@@ -66,7 +66,7 @@ export class RoomController {
   }
 
   @Roles('admin')
-  @Put('update/:room_num/status')
+  @Put('update-status/:room_num')
   public updateRoomStatus(
     @Param('room_num', ParseIntPipe) roomNum: number,
     @Body() updateRoomStatusDto: UpdateRoomStatusDto,
@@ -75,7 +75,7 @@ export class RoomController {
   }
 
   @Roles('admin', 'customer')
-  @Put('update/:room_num/hk-status')
+  @Put('update-hk-status/:room_num')
   public updateHousekeepingStatus(
     @Param('room_num', ParseIntPipe) roomNum: number,
     @Body() updateHKSDto: UpdateHousekeepingStatusDto,
@@ -84,7 +84,7 @@ export class RoomController {
   }
 
   @Roles('admin', 'customer')
-  @Patch(':room_num/items/:item_name/report-issue')
+  @Patch(':room_num/items/report-issue/:item_name')
   public reportIssue(
     @Param('room_num', ParseIntPipe) roomNum: number,
     @Param('item_name') itemName: string,

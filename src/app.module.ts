@@ -20,7 +20,6 @@ import { HashingProvider } from './hash/hashing.provider';
 import { HashModule } from './hash/hash.module';
 import { HashService } from './hash/hash.service';
 import { BcryptProvider } from './hash/bcrypt.provider';
-import { ConfigModule } from '@nestjs/config';
 import jwtConfig from './auth/config/jwt.config';
 import { JwtModule } from '@nestjs/jwt';
 import { APP_GUARD } from '@nestjs/core';
@@ -28,6 +27,8 @@ import { AccessTokenGuard } from './auth/guards/access-token/access-token.guard'
 import { AuthenticationGuard } from './auth/guards/authentication/authentication.guard';
 import { RolesGuard } from './auth/guards/roles/roles.guard';
 import { ScheduleModule } from '@nestjs/schedule';
+import { EmailModule } from './email/email.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -65,6 +66,8 @@ import { ScheduleModule } from '@nestjs/schedule';
     HashModule,
     ConfigModule.forFeature(jwtConfig),
     JwtModule.registerAsync(jwtConfig.asProvider()),
+    EmailModule,
+    ConfigModule.forRoot(),
   ],
   controllers: [AppController],
   providers: [

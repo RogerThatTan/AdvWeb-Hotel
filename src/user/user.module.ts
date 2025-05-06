@@ -10,6 +10,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { APP_GUARD } from '@nestjs/core';
 import { AccessTokenGuard } from 'src/auth/guards/access-token/access-token.guard';
 import { ReservationService } from 'src/reservation/reservation.service';
+import { EmailModule } from 'src/email/email.module';
 
 @Module({
   controllers: [UserController],
@@ -24,6 +25,7 @@ import { ReservationService } from 'src/reservation/reservation.service';
   imports: [
     TypeOrmModule.forFeature([User]),
     HashModule,
+    EmailModule,
     // ConfigModule.forFeature(jwtConfig),
     // JwtModule.registerAsync(jwtConfig.asProvider()),
   ],

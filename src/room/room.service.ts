@@ -1,4 +1,4 @@
-import { Body, Injectable, NotFoundException } from '@nestjs/common';
+import { Body, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Rooms, RoomStatus } from './entities/room.entity';
 import { Repository } from 'typeorm';
@@ -16,6 +16,10 @@ import { Paginated } from 'src/common/pagination/interfaces/paginated.interface'
 import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
 import { Reservation } from 'src/reservation/entities/reservation.entity';
 import { Booking } from 'src/booking/entities/booking.entity';
+import { EmailService } from 'src/email/email.service'; // Add this import
+import { join } from 'path';
+import { readFileSync } from 'fs';
+import * as ejs from 'ejs';
 
 @Injectable()
 export class RoomService {
@@ -27,6 +31,8 @@ export class RoomService {
     @InjectRepository(Employee)
     private employeeRepository: Repository<Employee>,
     private readonly paginationProvider: PaginationProvider,
+    @Inject(EmailService)
+    private readonly emailService: EmailService,
   ) {}
 
   public async getAllRooms(roomQuery: GetRoomsDto): Promise<Paginated<Rooms>> {
@@ -102,7 +108,20 @@ export class RoomService {
 
     item.issue_report = reportItemIssueDto.issue_report;
     item.status = reportItemIssueDto.status;
-    return await this.roomItemRepository.save(item);
+
+    const savedItem = await this.roomItemRepository.save(item);
+
+    const EMAIL_USER = process.env.EMAIL_USER || 'universuswebtech@gmail.com';
+
+    await this.sendIssueReportEmail(
+      EMAIL_USER,
+      room_num,
+      item_name,
+      reportItemIssueDto.issue_report,
+      reportItemIssueDto.status,
+    );
+
+    return savedItem;
   }
 
   public async createRoomItem(@Body() createRoomItem: CreateRoomItemDto) {
@@ -208,5 +227,60 @@ export class RoomService {
     });
 
     return rooms;
+  }
+
+  private async sendIssueReportEmail(
+    email: string,
+    roomNumber: number,
+    itemName: string,
+    issueDescription: string,
+    status: string,
+  ) {
+    try {
+      const possiblePaths = [
+        join(process.cwd(), 'src', 'email', 'templates', 'issue-report.ejs'),
+        join(process.cwd(), 'dist', 'email', 'templates', 'issue-report.ejs'),
+        join(__dirname, '..', '..', 'email', 'templates', 'issue-report.ejs'),
+      ];
+
+      let template;
+      for (const path of possiblePaths) {
+        try {
+          template = readFileSync(path, 'utf8');
+          break;
+        } catch (e) {
+          continue;
+        }
+      }
+
+      if (!template) {
+        throw new Error('Issue report template not found');
+      }
+
+      const html = ejs.render(template, {
+        roomNumber,
+        itemName,
+        issueDescription,
+        status,
+      });
+
+      await this.emailService.sendEmail({
+        recipients: [email],
+        subject: `Issue Reported for Room ${roomNumber} - ${itemName}`,
+        html: html,
+      });
+    } catch (error) {
+      console.error('Error sending issue report email:', error);
+      // Fallback to simple text email
+      await this.emailService.sendEmail({
+        recipients: [email],
+        subject: `Issue Reported for Room ${roomNumber}`,
+        html: `
+                <p><strong>Item:</strong> ${itemName}</p>
+                <p><strong>Issue:</strong> ${issueDescription}</p>
+                <p><strong>Status:</strong> ${status}</p>
+            `,
+      });
+    }
   }
 }

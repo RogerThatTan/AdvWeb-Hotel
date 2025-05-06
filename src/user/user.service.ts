@@ -1,10 +1,14 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { HashingProvider } from 'src/hash/hashing.provider';
 import { UpdateUserDto } from './dtos/update-user.dto';
+import { EmailService } from 'src/email/email.service'; // Add this import
+import { join } from 'path';
+import { readFileSync } from 'fs';
+import * as ejs from 'ejs';
 
 @Injectable()
 export class UserService {
@@ -12,6 +16,8 @@ export class UserService {
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
     private readonly hashProvider: HashingProvider,
+    @Inject(EmailService)
+    private readonly emailService: EmailService,
   ) {}
 
   // Create User----------------------------------------------------
@@ -32,6 +38,9 @@ export class UserService {
     try {
       const newUser = this.userRepository.create(validUser);
       await this.userRepository.save(newUser);
+      if (newUser.email) {
+        await this.sendWelcomeEmail(newUser.email, createUserDto);
+      }
       return { user: newUser };
     } catch (error) {
       return { message: 'Error creating user', error };
@@ -90,6 +99,46 @@ export class UserService {
       return user ? user : null;
     } catch (error) {
       return error;
+    }
+  }
+
+  // Welcome Mail----------------------------------------------------
+
+  private async sendWelcomeEmail(email: string, createUserDto?: CreateUserDto) {
+    try {
+      const possiblePaths = [
+        join(process.cwd(), 'src', 'email', 'templates', 'welcome.ejs'),
+        join(process.cwd(), 'dist', 'email', 'templates', 'welcome.ejs'),
+        join(__dirname, '..', '..', 'email', 'templates', 'welcome.ejs'),
+      ];
+      let template;
+      for (const path of possiblePaths) {
+        try {
+          console.log('Trying path:', path);
+          template = readFileSync(path, 'utf8');
+          break;
+        } catch (e) {
+          continue;
+        }
+      }
+      if (!template) {
+        throw new Error('Template not found in any location');
+      }
+      const html = ejs.render(template, {
+        username: createUserDto?.name,
+      });
+      await this.emailService.sendEmail({
+        recipients: [email],
+        subject: 'Welcome to Amin Hotel',
+        html: html,
+      });
+    } catch (error) {
+      console.error('Error sending welcome email:', error);
+      await this.emailService.sendEmail({
+        recipients: [email],
+        subject: 'Welcome to Our Service!',
+        html: `<p>Welcome ${email.split('@')[0]}!</p>`,
+      });
     }
   }
 }
