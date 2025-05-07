@@ -47,10 +47,10 @@ export class Employee {
   @Column({ type: 'enum', enum: EmployeeRole })
   role: EmployeeRole;
 
-  @Column({ type: 'varchar', length: 20 })
+  @Column({ type: 'varchar', length: 20, unique: true })
   phone: string;
 
-  @Column({ type: 'varchar', length: 50, nullable: true })
+  @Column({ type: 'varchar', length: 50, nullable: true, unique: true })
   nid?: string;
 
   @Column({ type: 'date' })
