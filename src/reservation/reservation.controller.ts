@@ -12,8 +12,8 @@ import { ReservationService } from './reservation.service';
 import { CreateReservationDto } from './dtos/create.dto';
 import { PdfService } from 'src/pdf/pdf.service';
 import { Response } from 'express';
+import { Roles } from 'src/auth/decorators/roles.decorator';
 
-@Auth(AuthType.None)
 @Controller('reservation')
 export class ReservationController {
   constructor(private readonly reservationService: ReservationService) {}
@@ -31,7 +31,7 @@ export class ReservationController {
     }
     return this.reservationService.createReservation(createReservationDto, res);
   }
-
+  @Roles('admin')
   @Post('confirm')
   async confirmReservation(@Body() body: { reservation_id: number }) {
     const { reservation_id } = body;

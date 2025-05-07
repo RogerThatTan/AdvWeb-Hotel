@@ -5,7 +5,6 @@ import { Auth } from 'src/auth/decorators/auth.decorator';
 import { AuthType } from 'src/auth/enums/auth-type.enum';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 
-@Auth(AuthType.None)
 @Controller('coupon')
 export class CouponController {
   constructor(private readonly couponService: CouponService) {}
@@ -15,12 +14,12 @@ export class CouponController {
   public getCoupons() {
     return this.couponService.getAllCoupons();
   }
-
+  @Roles('admin')
   @Get('couponUsage')
   public getCouponUsage() {
     return this.couponService.getCouponUsage();
   }
-
+  @Roles('admin')
   @Get('couponUsage/:coupon_code')
   public getCouponUsageByCode(@Param('coupon_code') coupon_code: string) {
     return this.couponService.getCouponUsageByCode(coupon_code);
