@@ -5,6 +5,7 @@ import { Auth } from 'src/auth/decorators/auth.decorator';
 import { AuthType } from 'src/auth/enums/auth-type.enum';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 
+
 @Controller('coupon')
 export class CouponController {
   constructor(private readonly couponService: CouponService) {}
